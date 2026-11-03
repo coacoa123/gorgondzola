@@ -3,100 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GARGANTUYA | Luxury Ambient Radio</title>
-    <!-- Подключаем элегантные шрифты -->
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@200;300&display=swap" rel="stylesheet">
+    <title>GARGANTUYA | Cosmic Stream</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #050505;
-            color: #f5f5f5;
-            font-family: 'Montserrat', sans-serif;
+            background: #000;
             overflow: hidden;
             height: 100vh;
             width: 100vw;
         }
 
-        /* --- ЭКРАН ВХОДА (нужен для разрешения автовоспроизведения звука) --- */
+        /* --- ЭКРАН ВХОДА --- */
         #intro {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: #050505;
+            background: #000;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 100;
-            transition: opacity 1.5s ease, visibility 1.5s ease;
+            transition: opacity 2s ease, visibility 2s ease;
         }
         #intro.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
         
-        #intro h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2rem;
-            font-weight: 300;
-            letter-spacing: 8px;
-            text-transform: uppercase;
-            color: #D4AF37;
-            margin-bottom: 40px;
-            text-align: center;
-            padding: 0 20px;
-        }
-        
         #enterBtn {
             background: transparent;
-            border: 1px solid #D4AF37;
-            color: #D4AF37;
-            padding: 15px 45px;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 18px 50px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.8rem;
-            letter-spacing: 4px;
+            font-size: 0.75rem;
+            letter-spacing: 5px;
             text-transform: uppercase;
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.5s ease;
         }
         #enterBtn:hover {
-            background: #D4AF37;
-            color: #050505;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.6);
+            box-shadow: 0 0 40px rgba(255,255,255,0.2);
         }
 
-        /* --- АМБИЕНТНАЯ ПОДСВЕТКА (Живые пятна света) --- */
+        /* --- АМБИЕНТНАЯ ПОДСВЕТКА --- */
         .ambient-glow {
             position: fixed;
-            width: 800px;
-            height: 800px;
+            width: 1000px;
+            height: 1000px;
             border-radius: 50%;
-            filter: blur(180px);
-            opacity: 0.25;
+            filter: blur(200px);
+            opacity: 0.2;
             z-index: 1;
-            animation: float 25s infinite ease-in-out;
+            animation: float 30s infinite ease-in-out;
             pointer-events: none;
         }
         .glow-1 {
-            top: -300px; left: -300px;
-            background: radial-gradient(circle, #D4AF37 0%, transparent 70%);
+            top: -400px; left: -400px;
+            background: radial-gradient(circle, #4A90E2 0%, transparent 70%);
             animation-delay: 0s;
         }
         .glow-2 {
-            bottom: -300px; right: -300px;
-            background: radial-gradient(circle, #5A3A22 0%, transparent 70%);
-            animation-delay: 8s;
+            bottom: -400px; right: -400px;
+            background: radial-gradient(circle, #8B5A3C 0%, transparent 70%);
+            animation-delay: 10s;
         }
         .glow-3 {
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             background: radial-gradient(circle, #2E0854 0%, transparent 70%);
-            animation-delay: 16s;
+            animation-delay: 20s;
         }
 
         @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.25; }
-            33% { transform: translate(60px, 40px) scale(1.15); opacity: 0.35; }
-            66% { transform: translate(-40px, 60px) scale(0.9); opacity: 0.2; }
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.2; }
+            33% { transform: translate(80px, 50px) scale(1.2); opacity: 0.3; }
+            66% { transform: translate(-50px, 70px) scale(0.85); opacity: 0.15; }
         }
 
-        /* --- ФОНОВЫЕ ИЗОБРАЖЕНИЯ (Слайдер) --- */
+        /* --- ФОНОВЫЕ ИЗОБРАЖЕНИЯ --- */
         .slide {
             position: absolute;
             top: 0; left: 0;
@@ -104,96 +89,50 @@
             background-size: cover;
             background-position: center;
             opacity: 0;
-            transition: opacity 4s ease-in-out;
+            transition: opacity 5s ease-in-out;
             z-index: 2;
-            animation: slowZoom 30s infinite alternate ease-in-out;
+            animation: slowZoom 35s infinite alternate ease-in-out;
         }
         .slide.active { opacity: 1; }
         
-        /* Кинематографичная виньетка поверх картинок */
+        /* Кинематографичная виньетка */
         .slide::after {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.85) 100%);
+            background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.7) 100%);
         }
 
         @keyframes slowZoom {
             0% { transform: scale(1); }
-            100% { transform: scale(1.15); }
+            100% { transform: scale(1.1); }
         }
 
-        /* --- ЦЕНТРАЛЬНЫЙ ТЕКСТ --- */
-        #content {
-            position: relative;
-            z-index: 10;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            pointer-events: none;
-        }
-        #content h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 300;
-            letter-spacing: 15px;
-            text-transform: uppercase;
-            color: #fff;
-            text-shadow: 0 4px 40px rgba(0,0,0,0.9);
-            margin-bottom: 20px;
-            opacity: 0;
-            animation: fadeUp 2.5s forwards 1s;
-        }
-        #content .divider {
-            width: 80px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #D4AF37, transparent);
-            margin-bottom: 25px;
-            opacity: 0;
-            animation: fadeUp 2.5s forwards 1.5s;
-        }
-        #content p {
-            font-size: 0.9rem;
-            letter-spacing: 8px;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.6);
-            opacity: 0;
-            animation: fadeUp 2.5s forwards 2s;
-        }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- АУДИО-КОНТРОЛЛЕР --- */
+        /* --- КНОПКА ЗВУКА --- */
         #audioControl {
             position: fixed;
-            bottom: 40px;
-            right: 40px;
+            bottom: 50px;
+            right: 50px;
             z-index: 20;
-            color: #D4AF37;
-            font-size: 0.7rem;
+            color: #fff;
+            font-size: 0.65rem;
             letter-spacing: 3px;
             text-transform: uppercase;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             cursor: pointer;
             opacity: 0;
-            transition: opacity 1s ease 3s, background 0.3s ease, border-color 0.3s ease;
-            padding: 12px 24px;
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: opacity 1.5s ease 2s, background 0.3s ease, border-color 0.3s ease;
+            padding: 14px 28px;
+            border: 1px solid rgba(255,255,255,0.2);
             border-radius: 30px;
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(8px);
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
         }
         #audioControl.visible { opacity: 1; }
         #audioControl:hover {
-            border-color: rgba(212, 175, 55, 0.6);
+            border-color: rgba(255,255,255,0.5);
             background: rgba(0,0,0,0.6);
         }
         
@@ -206,7 +145,7 @@
         .sound-wave span {
             display: block;
             width: 2px;
-            background: #D4AF37;
+            background: #fff;
             animation: wave 1.2s infinite ease-in-out;
         }
         .sound-wave span:nth-child(1) { height: 4px; animation-delay: 0.1s; }
@@ -221,11 +160,6 @@
             50% { transform: scaleY(1.3); }
         }
 
-        .live-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
         .live-dot {
             width: 6px;
             height: 6px;
@@ -249,23 +183,14 @@
 
     <!-- ЭКРАН ВХОДА -->
     <div id="intro">
-        <h2>Добро пожаловать в Gargantuya</h2>
-        <button id="enterBtn">Войти в эфир</button>
+        <button id="enterBtn">Войти</button>
     </div>
 
     <!-- ФОНОВЫЕ ИЗОБРАЖЕНИЯ -->
-    <!-- Чтобы поставить свои фото, замени ссылки в url('...') на пути к своим файлам, например: url('my-photo-1.jpg') -->
-    <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1920&q=80');"></div>
-    <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1920&q=80');"></div>
-    <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=1920&q=80');"></div>
-    <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1920&q=80');"></div>
-
-    <!-- ТЕКСТ ПОВЕРХ -->
-    <div id="content">
-        <h1>GARGANTUYA</h1>
-        <div class="divider"></div>
-        <p>Live Ambient Stream</p>
-    </div>
+    <!-- Замени эти ссылки на свои файлы: photo1.jpg, photo2.jpg, photo3.jpg -->
+    <div class="slide active" style="background-image: url('photo1.jpg');"></div>
+    <div class="slide" style="background-image: url('photo2.jpg');"></div>
+    <div class="slide" style="background-image: url('photo3.jpg');"></div>
 
     <!-- КНОПКА УПРАВЛЕНИЯ ЗВУКОМ -->
     <div id="audioControl" onclick="toggleAudio()">
@@ -273,19 +198,15 @@
             <span></span><span></span><span></span><span></span>
         </div>
         <span>LIVE</span>
-        <div class="live-indicator">
-            <div class="live-dot"></div>
-        </div>
+        <div class="live-dot"></div>
     </div>
 
     <!-- АУДИО ПЛЕЕР -->
     <audio id="bgMusic" preload="none"></audio>
 
     <script>
-        // ✅ ПРЯМАЯ ССЫЛКА НА ПОТОК ZENO.FM
         const radioStream = 'https://stream.zeno.fm/p49hqzfxmb4uv';
-        
-        const slideDuration = 10000; // 10 секунд на показ одной картинки
+        const slideDuration = 12000; // 12 секунд на фото
 
         const audio = document.getElementById('bgMusic');
         const intro = document.getElementById('intro');
@@ -297,7 +218,6 @@
         let currentSlide = 0;
         let isPlaying = false;
 
-        // Запуск по клику (обходит блокировку автовоспроизведения в браузерах)
         enterBtn.addEventListener('click', () => {
             intro.classList.add('hidden');
             audioControl.classList.add('visible');
@@ -306,10 +226,8 @@
 
         function startExperience() {
             audio.src = radioStream;
-            audio.play().catch(e => console.log("Ожидание взаимодействия с плеером:", e));
+            audio.play().catch(e => console.log("Ожидание взаимодействия:", e));
             isPlaying = true;
-            
-            // Запускаем бесконечную смену слайдов
             setInterval(nextSlide, slideDuration);
         }
 
@@ -331,9 +249,9 @@
             }
         }
 
-        // 🛡️ УМНАЯ ЗАЩИТА: Если интернет моргнул и поток оборвался, плеер сам переподключится через 5 секунд
+        // Автоматическое переподключение при обрыве потока
         audio.addEventListener('error', function() {
-            console.log("Поток прерван, автоматическое переподключение...");
+            console.log("Поток прерван, переподключение...");
             wave.classList.add('paused');
             setTimeout(() => {
                 audio.load();
