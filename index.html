@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GARGANTUYA | Luxury Life</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -12,8 +11,10 @@
             overflow: hidden;
             height: 100vh;
             width: 100vw;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
 
+        /* --- ЭКРАН ЗАПУСКА --- */
         #intro {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -23,35 +24,51 @@
             justify-content: center;
             align-items: center;
             z-index: 100;
-            transition: opacity 2s ease, visibility 2s ease;
+            transition: opacity 1.5s ease, visibility 1.5s ease;
         }
         #intro.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-        
-        #enterBtn {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.3);
-            color: #fff;
-            padding: 18px 50px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.75rem;
-            letter-spacing: 5px;
-            text-transform: uppercase;
+
+        /* Круглая кнопка Play как на девайсе */
+        #playBtn {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.4);
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
             cursor: pointer;
-            transition: all 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+            position: relative;
         }
-        #enterBtn:hover {
+        #playBtn:hover {
+            border-color: #fff;
             background: rgba(255,255,255,0.1);
-            border-color: rgba(255,255,255,0.6);
-            box-shadow: 0 0 40px rgba(255,255,255,0.2);
+            box-shadow: 0 0 50px rgba(255,255,255,0.3);
+            transform: scale(1.08);
+        }
+        /* Треугольник Play */
+        #playBtn::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 18px 0 18px 32px;
+            border-color: transparent transparent transparent #fff;
+            margin-left: 8px; /* центровка треугольника */
+            transition: all 0.3s ease;
         }
 
+        /* --- АМБИЕНТНАЯ ПОДСВЕТКА --- */
         .ambient-glow {
             position: fixed;
             width: 1000px;
             height: 1000px;
             border-radius: 50%;
             filter: blur(200px);
-            opacity: 0.2;
+            opacity: 0.25;
             z-index: 1;
             animation: float 30s infinite ease-in-out;
             pointer-events: none;
@@ -74,11 +91,12 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.2; }
-            33% { transform: translate(80px, 50px) scale(1.2); opacity: 0.3; }
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.25; }
+            33% { transform: translate(80px, 50px) scale(1.2); opacity: 0.35; }
             66% { transform: translate(-50px, 70px) scale(0.85); opacity: 0.15; }
         }
 
+        /* --- СЛАЙДЫ --- */
         .slide {
             position: absolute;
             top: 0; left: 0;
@@ -96,14 +114,15 @@
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.7) 100%);
+            background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.75) 100%);
         }
 
         @keyframes slowZoom {
             0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
+            100% { transform: scale(1.08); }
         }
 
+        /* --- КНОПКА ЗВУКА (правый нижний угол) --- */
         #audioControl {
             position: fixed;
             bottom: 50px;
@@ -171,17 +190,20 @@
 </head>
 <body>
 
+    <!-- Амбиентная подсветка -->
     <div class="ambient-glow glow-1"></div>
     <div class="ambient-glow glow-2"></div>
     <div class="ambient-glow glow-3"></div>
 
+    <!-- Экран запуска с кнопкой Play -->
     <div id="intro">
-        <button id="enterBtn">Войти</button>
+        <button id="playBtn" aria-label="Play"></button>
     </div>
 
-    <!-- Слайды будут добавлены автоматически через JavaScript -->
+    <!-- Контейнер для слайдов -->
     <div id="slides-container"></div>
 
+    <!-- Кнопка звука справа внизу -->
     <div id="audioControl" onclick="toggleAudio()">
         <div class="sound-wave" id="wave">
             <span></span><span></span><span></span><span></span>
@@ -194,53 +216,105 @@
 
     <script>
         // ==========================================
-        // ⚙️ НАСТРОЙКИ (меняй только здесь!)
+        // ⚙️ НАСТРОЙКИ
         // ==========================================
-        const TOTAL_PHOTOS = 150;          // Сколько фото у тебя всего (photo1.jpg ... photo150.jpg)
-        const PHOTO_PREFIX = 'photo';      // Префикс имени файла
-        const PHOTO_EXTENSION = '.jpg';    // Расширение файла (.jpg или .png)
-        const SLIDE_DURATION = 10000;      // Время показа одного фото в мс (10000 = 10 сек)
+        
+        // 🖼️ СПИСОК ФОТО — просто дописывай сюда свои!
+        // Можно использовать URL из интернета или имена своих файлов (photo1.jpg и т.д.)
+        const photos = [
+            // Рабочие ссылки по умолчанию (25 лакшери-фото)
+            'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1920&q=80',
+            'https://images.unsplash.com/photo-1502680390548-bdbac40a5e20?w=1920&q=80',
+            'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80',
+            'https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=1920&q=80',
+            'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=1920&q=80',
+            'https://images.unsplash.com/photo-1533106497176-45ae19e68ba2?w=1920&q=80',
+            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80',
+            'https://images.unsplash.com/photo-1504215680853-026ed2a45def?w=1920&q=80',
+            'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80',
+            'https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=1920&q=80',
+            'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1920&q=80',
+            'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1920&q=80',
+            'https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7?w=1920&q=80',
+            'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1920&q=80',
+            'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1920&q=80',
+            'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1920&q=80',
+            'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1920&q=80',
+            'https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=1920&q=80',
+            'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1920&q=80',
+            'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80',
+            'https://images.unsplash.com/photo-1505144808419-1957a94ca61e?w=1920&q=80',
+            'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=1920&q=80',
+            'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=1920&q=80',
+            'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1920&q=80',
+            'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=1920&q=80',
+            
+            // 👇 ДОПИСЫВАЙ СВОИ ФОТО СЮДА (просто добавь новую строку):
+            // 'photo1.jpg',
+            // 'photo2.jpg',
+            // 'https://твоя-ссылка-на-фото.jpg',
+        ];
+
+        const SLIDE_DURATION = 10000; // 10 секунд на фото
         const RADIO_STREAM = 'https://stream.zeno.fm/p49hqzfxmb4uv';
+
         // ==========================================
 
-        // 🎲 Функция перемешивания массива (Fisher-Yates)
+        // 🎲 Перемешивание массива (Fisher-Yates)
         function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+                [arr[i], arr[j]] = [arr[j], arr[i]];
             }
-            return array;
+            return arr;
         }
 
-        // 🖼️ Генерируем список фото и перемешиваем
-        const photoList = [];
-        for (let i = 1; i <= TOTAL_PHOTOS; i++) {
-            photoList.push(`${PHOTO_PREFIX}${i}${PHOTO_EXTENSION}`);
-        }
-        const shuffledPhotos = shuffleArray(photoList);
-
-        // Создаём слайды в DOM
+        // 🖼️ Создаём слайды
         const container = document.getElementById('slides-container');
+        const shuffledPhotos = shuffleArray(photos);
+        let slides = [];
+
         shuffledPhotos.forEach((photo, index) => {
             const slide = document.createElement('div');
             slide.className = 'slide' + (index === 0 ? ' active' : '');
             slide.style.backgroundImage = `url('${photo}')`;
             slide.dataset.src = photo;
             container.appendChild(slide);
+            slides.push(slide);
         });
 
-        // 🎵 Аудио и слайдер
+        // 🛡️ Проверка загрузки фото — битые удаляем, чтобы не было чёрного экрана
+        slides.forEach((slide, idx) => {
+            const img = new Image();
+            img.onload = () => {
+                console.log(`✅ Загружено: ${slide.dataset.src}`);
+            };
+            img.onerror = () => {
+                console.warn(`❌ Не загружено: ${slide.dataset.src} — удаляем`);
+                slide.remove();
+                slides = slides.filter(s => s !== slide);
+                // Если удалили активный слайд — активируем следующий
+                if (slide.classList.contains('active') && slides.length > 0) {
+                    slides[0].classList.add('active');
+                }
+            };
+            img.src = slide.dataset.src;
+        });
+
+        // 🎵 Аудио и управление
         const audio = document.getElementById('bgMusic');
         const intro = document.getElementById('intro');
-        const enterBtn = document.getElementById('enterBtn');
-        const slides = document.querySelectorAll('.slide');
+        const playBtn = document.getElementById('playBtn');
         const audioControl = document.getElementById('audioControl');
         const wave = document.getElementById('wave');
         
         let currentSlide = 0;
         let isPlaying = false;
+        let slideInterval = null;
 
-        enterBtn.addEventListener('click', () => {
+        // Запуск по кнопке Play
+        playBtn.addEventListener('click', () => {
             intro.classList.add('hidden');
             audioControl.classList.add('visible');
             startExperience();
@@ -248,12 +322,13 @@
 
         function startExperience() {
             audio.src = RADIO_STREAM;
-            audio.play().catch(e => console.log("Ожидание взаимодействия:", e));
+            audio.play().catch(e => console.log("Ожидание:", e));
             isPlaying = true;
-            setInterval(nextSlide, SLIDE_DURATION);
+            slideInterval = setInterval(nextSlide, SLIDE_DURATION);
         }
 
         function nextSlide() {
+            if (slides.length === 0) return;
             slides[currentSlide].classList.remove('active');
             currentSlide = (currentSlide + 1) % slides.length;
             slides[currentSlide].classList.add('active');
@@ -271,15 +346,20 @@
             }
         }
 
-        // 🛡️ Если фото не загрузилось — пропускаем его
-        slides.forEach(slide => {
-            slide.addEventListener('error', () => {
-                console.log(`Фото ${slide.dataset.src} не найдено, пропускаем`);
-                slide.style.display = 'none';
-            });
+        // ⌨️ Пробел = пауза/воспроизведение (без визуальных подсказок)
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && !intro.classList.contains('hidden')) {
+                // Если ещё на экране запуска — запускаем
+                playBtn.click();
+                e.preventDefault();
+            } else if (e.code === 'Space' && intro.classList.contains('hidden')) {
+                // Если сайт уже запущен — пауза/плей
+                toggleAudio();
+                e.preventDefault();
+            }
         });
 
-        // 🛡️ Автоматическое переподключение радио при обрыве
+        // 🛡️ Переподключение радио при обрыве
         audio.addEventListener('error', function() {
             console.log("Поток прерван, переподключение...");
             wave.classList.add('paused');
