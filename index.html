@@ -17,7 +17,7 @@
         }
 
         /* ==========================================
-           ЭКРАН ЗАПУСКА: ПРИОТКРЫТАЯ ДВЕРЬ СО СВЕТОМ
+           ЭКРАН ЗАПУСКА: ДВЕРЬ СО СВЕТОМ
            ========================================== */
         #intro {
             position: fixed;
@@ -33,84 +33,42 @@
         }
         #intro.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-        /* Стены комнаты */
         .room {
-            position: absolute;
-            inset: 0;
-            background: 
-                radial-gradient(ellipse at center, #1a1510 0%, #0a0805 60%, #000 100%);
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at center, #1a1510 0%, #0a0805 60%, #000 100%);
         }
-
-        /* Дверной проём (тёмная вертикальная щель) */
         .door-frame {
-            position: absolute;
-            top: 5%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 180px;
-            height: 90%;
-            background: #000;
+            position: absolute; top: 5%; left: 50%; transform: translateX(-50%);
+            width: 180px; height: 90%; background: #000;
             box-shadow: inset 0 0 40px rgba(0,0,0,0.9);
         }
-
-        /* Приоткрытая дверь (чуть видна слева) */
         .door {
-            position: absolute;
-            top: 5%;
-            left: calc(50% - 110px);
-            width: 140px;
-            height: 90%;
+            position: absolute; top: 5%; left: calc(50% - 110px);
+            width: 140px; height: 90%;
             background: linear-gradient(90deg, #1a1510 0%, #0d0a07 100%);
             transform: perspective(800px) rotateY(25deg);
             transform-origin: left center;
-            box-shadow: 
-                inset -10px 0 30px rgba(0,0,0,0.8),
-                5px 0 20px rgba(0,0,0,0.5);
+            box-shadow: inset -10px 0 30px rgba(0,0,0,0.8), 5px 0 20px rgba(0,0,0,0.5);
         }
-
-        /* Яркий свет из-за двери */
         .light-beam {
-            position: absolute;
-            top: 5%;
-            left: calc(50% - 40px);
-            width: 80px;
-            height: 90%;
-            background: linear-gradient(
-                180deg,
-                rgba(255, 240, 200, 0.95) 0%,
-                rgba(255, 220, 150, 0.8) 50%,
-                rgba(255, 200, 100, 0.6) 100%
-            );
+            position: absolute; top: 5%; left: calc(50% - 40px);
+            width: 80px; height: 90%;
+            background: linear-gradient(180deg, rgba(255, 240, 200, 0.95) 0%, rgba(255, 220, 150, 0.8) 50%, rgba(255, 200, 100, 0.6) 100%);
             filter: blur(8px);
-            box-shadow: 
-                0 0 60px rgba(255, 220, 150, 0.6),
-                0 0 120px rgba(255, 200, 100, 0.4);
+            box-shadow: 0 0 60px rgba(255, 220, 150, 0.6), 0 0 120px rgba(255, 200, 100, 0.4);
             animation: lightPulse 4s infinite ease-in-out;
         }
-
-        /* Расходящиеся лучи света на полу */
         .light-rays {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            height: 40%;
-            background: 
-                radial-gradient(ellipse at 50% 0%, rgba(255, 220, 150, 0.3) 0%, transparent 70%);
+            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; height: 40%;
+            background: radial-gradient(ellipse at 50% 0%, rgba(255, 220, 150, 0.3) 0%, transparent 70%);
             filter: blur(20px);
             animation: lightPulse 4s infinite ease-in-out 0.5s;
         }
-
-        /* Пылинки в луче света */
         .dust {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: rgba(255, 240, 200, 0.8);
-            border-radius: 50%;
-            filter: blur(1px);
-            animation: floatDust 8s infinite ease-in-out;
+            position: absolute; width: 3px; height: 3px;
+            background: rgba(255, 240, 200, 0.8); border-radius: 50%;
+            filter: blur(1px); animation: floatDust 8s infinite ease-in-out;
         }
         .dust:nth-child(1) { top: 30%; left: 48%; animation-delay: 0s; }
         .dust:nth-child(2) { top: 50%; left: 52%; animation-delay: 2s; }
@@ -118,34 +76,22 @@
         .dust:nth-child(4) { top: 60%; left: 49%; animation-delay: 1s; }
         .dust:nth-child(5) { top: 35%; left: 51%; animation-delay: 3s; }
 
-        @keyframes lightPulse {
-            0%, 100% { opacity: 0.85; }
-            50% { opacity: 1; }
-        }
+        @keyframes lightPulse { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }
+        @keyframes floatDust { 0%, 100% { transform: translate(0, 0); opacity: 0.3; } 50% { transform: translate(10px, -20px); opacity: 0.9; } }
 
-        @keyframes floatDust {
-            0%, 100% { transform: translate(0, 0); opacity: 0.3; }
-            50% { transform: translate(10px, -20px); opacity: 0.9; }
-        }
-
-        /* КНОПКА PLAY */
+        /* --- УМЕНЬШЕННАЯ КНОПКА PLAY --- */
         #playBtn {
-            position: relative;
-            z-index: 10;
-            width: 90px;
-            height: 90px;
+            position: relative; z-index: 10;
+            width: 70px; height: 70px; /* Было 90px, стало 70px */
             border-radius: 50%;
             border: 2px solid rgba(255, 255, 255, 0.4);
             background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             transition: all 0.4s ease;
             box-shadow: 0 0 40px rgba(255, 220, 150, 0.2);
-            margin-bottom: 30px;
         }
         #playBtn:hover {
             transform: scale(1.1);
@@ -153,316 +99,136 @@
             box-shadow: 0 0 60px rgba(255, 220, 150, 0.5);
             background: rgba(255, 220, 150, 0.1);
         }
-        #playBtn:active {
-            transform: scale(1.05);
-        }
-
-        /* Треугольник Play */
         .play-icon {
-            width: 0;
-            height: 0;
+            width: 0; height: 0;
             border-style: solid;
-            border-width: 16px 0 16px 28px;
+            border-width: 12px 0 12px 20px; /* Уменьшили треугольник */
             border-color: transparent transparent transparent #fff;
-            margin-left: 6px;
+            margin-left: 5px;
             filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
         }
 
-        .intro-text {
-            position: relative;
-            z-index: 10;
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.7rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-top: 20px;
-        }
-
-        /* ==========================================
-           СЛАЙДЫ (оптимизировано для плавности)
-           ========================================== */
-        #slides-container {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 2;
-        }
-
+        /* --- СЛАЙДЫ --- */
+        #slides-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; }
         .slide {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-size: cover;
-            background-position: center;
-            opacity: 0;
-            will-change: opacity;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center;
+            opacity: 0; will-change: opacity;
             transition: opacity 1.5s ease-in-out;
         }
         .slide.active { opacity: 1; }
-        .slide.prev { opacity: 0; }
-        
         .slide::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.6) 100%);
             pointer-events: none;
         }
-
-        /* На десктопе — лёгкий зум */
         @media (min-width: 769px) {
-            .slide {
-                animation: slowZoom 40s infinite alternate ease-in-out;
-            }
-            @keyframes slowZoom {
-                0% { transform: scale(1); }
-                100% { transform: scale(1.08); }
-            }
+            .slide { animation: slowZoom 40s infinite alternate ease-in-out; }
+            @keyframes slowZoom { 0% { transform: scale(1); } 100% { transform: scale(1.08); } }
         }
 
-        /* ==========================================
-           АМБИЕНТНАЯ ПОДСВЕТКА
-           ========================================== */
+        /* --- АМБИЕНТ --- */
         .ambient-glow {
-            position: fixed;
-            width: 800px;
-            height: 800px;
-            border-radius: 50%;
-            filter: blur(180px);
-            opacity: 0.2;
-            z-index: 1;
-            animation: float 30s infinite ease-in-out;
-            pointer-events: none;
+            position: fixed; width: 800px; height: 800px; border-radius: 50%;
+            filter: blur(180px); opacity: 0.2; z-index: 1;
+            animation: float 30s infinite ease-in-out; pointer-events: none;
         }
-        .glow-1 {
-            top: -300px; left: -300px;
-            background: radial-gradient(circle, #D4AF37 0%, transparent 70%);
-            animation-delay: 0s;
-        }
-        .glow-2 {
-            bottom: -300px; right: -300px;
-            background: radial-gradient(circle, #8B5A3C 0%, transparent 70%);
-            animation-delay: 10s;
-        }
-        .glow-3 {
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            background: radial-gradient(circle, #2E0854 0%, transparent 70%);
-            animation-delay: 20s;
-        }
+        .glow-1 { top: -300px; left: -300px; background: radial-gradient(circle, #D4AF37 0%, transparent 70%); animation-delay: 0s; }
+        .glow-2 { bottom: -300px; right: -300px; background: radial-gradient(circle, #8B5A3C 0%, transparent 70%); animation-delay: 10s; }
+        .glow-3 { top: 50%; left: 50%; transform: translate(-50%, -50%); background: radial-gradient(circle, #2E0854 0%, transparent 70%); animation-delay: 20s; }
+        @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.2; } 33% { transform: translate(60px, 40px) scale(1.15); opacity: 0.3; } 66% { transform: translate(-40px, 60px) scale(0.9); opacity: 0.15; } }
 
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.2; }
-            33% { transform: translate(60px, 40px) scale(1.15); opacity: 0.3; }
-            66% { transform: translate(-40px, 60px) scale(0.9); opacity: 0.15; }
-        }
-
-        /* ==========================================
-           КНОПКИ УПРАВЛЕНИЯ (справа внизу)
-           ========================================== */
+        /* --- КНОПКИ УПРАВЛЕНИЯ (ОДИНАКОВЫЙ РАЗМЕР) --- */
         .controls {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 20;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            align-items: flex-end;
-            opacity: 0;
-            transition: opacity 1s ease 1s;
+            position: fixed; bottom: 30px; right: 30px; z-index: 20;
+            display: flex; flex-direction: column; gap: 12px; align-items: flex-end;
+            opacity: 0; transition: opacity 1s ease 1s;
         }
         .controls.visible { opacity: 1; }
 
         .control-btn {
-            color: #fff;
-            font-size: 0.6rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
+            /* Фиксированная ширина, чтобы кнопки были одинаковыми */
+            width: 110px; 
+            justify-content: center;
+            
+            color: #fff; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase;
+            display: flex; align-items: center; gap: 10px; cursor: pointer;
             padding: 10px 18px;
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 30px;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            user-select: none;
+            border: 1px solid rgba(255,255,255,0.2); border-radius: 30px;
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease; user-select: none;
         }
-        .control-btn:hover {
-            border-color: rgba(255,255,255,0.5);
-            background: rgba(0,0,0,0.7);
-        }
+        .control-btn:hover { border-color: rgba(255,255,255,0.5); background: rgba(0,0,0,0.7); }
 
-        /* Иконка fullscreen */
-        .fullscreen-icon {
-            width: 14px;
-            height: 14px;
-            position: relative;
+        .fullscreen-icon { width: 14px; height: 14px; position: relative; }
+        .fullscreen-icon::before, .fullscreen-icon::after {
+            content: ''; position: absolute; width: 6px; height: 6px; border: 1.5px solid #fff;
         }
-        .fullscreen-icon::before,
-        .fullscreen-icon::after {
-            content: '';
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            border: 1.5px solid #fff;
-        }
-        .fullscreen-icon::before {
-            top: 0; left: 0;
-            border-right: none;
-            border-bottom: none;
-        }
-        .fullscreen-icon::after {
-            bottom: 0; right: 0;
-            border-left: none;
-            border-top: none;
-        }
+        .fullscreen-icon::before { top: 0; left: 0; border-right: none; border-bottom: none; }
+        .fullscreen-icon::after { bottom: 0; right: 0; border-left: none; border-top: none; }
 
-        .sound-wave {
-            display: flex;
-            gap: 3px;
-            align-items: center;
-            height: 12px;
-        }
-        .sound-wave span {
-            display: block;
-            width: 2px;
-            background: #fff;
-            animation: wave 1.2s infinite ease-in-out;
-        }
+        .sound-wave { display: flex; gap: 3px; align-items: center; height: 12px; }
+        .sound-wave span { display: block; width: 2px; background: #fff; animation: wave 1.2s infinite ease-in-out; }
         .sound-wave span:nth-child(1) { height: 4px; animation-delay: 0.1s; }
         .sound-wave span:nth-child(2) { height: 8px; animation-delay: 0.2s; }
         .sound-wave span:nth-child(3) { height: 12px; animation-delay: 0.3s; }
         .sound-wave span:nth-child(4) { height: 6px; animation-delay: 0.4s; }
-        
         .sound-wave.paused span { animation: none; height: 2px; }
+        @keyframes wave { 0%, 100% { transform: scaleY(0.5); } 50% { transform: scaleY(1.3); } }
 
-        @keyframes wave {
-            0%, 100% { transform: scaleY(0.5); }
-            50% { transform: scaleY(1.3); }
-        }
+        .live-dot { width: 5px; height: 5px; background: #ff3333; border-radius: 50%; box-shadow: 0 0 8px #ff3333; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.3); } }
 
-        .live-dot {
-            width: 5px;
-            height: 5px;
-            background: #ff3333;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #ff3333;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(1.3); }
-        }
-
-        /* ==========================================
-           МОБИЛЬНАЯ АДАПТАЦИЯ
-           ========================================== */
+        /* --- МОБИЛЬНАЯ АДАПТАЦИЯ --- */
         @media (max-width: 768px) {
-            .door-frame { width: 140px; }
-            .door { left: calc(50% - 90px); width: 110px; }
-            .light-beam { left: calc(50% - 30px); width: 60px; }
-            
-            #playBtn {
-                width: 80px;
-                height: 80px;
-            }
-            .play-icon {
-                border-width: 14px 0 14px 24px;
-                margin-left: 5px;
-            }
-            
-            .controls {
-                bottom: 20px;
-                right: 20px;
-            }
-            .control-btn {
-                padding: 8px 14px;
-                font-size: 0.55rem;
-            }
-            
-            .ambient-glow {
-                width: 500px;
-                height: 500px;
-            }
+            .door-frame { width: 140px; } .door { left: calc(50% - 90px); width: 110px; } .light-beam { left: calc(50% - 30px); width: 60px; }
+            #playBtn { width: 60px; height: 60px; }
+            .play-icon { border-width: 10px 0 10px 16px; margin-left: 4px; }
+            .controls { bottom: 20px; right: 20px; }
+            .control-btn { width: 100px; padding: 9px 14px; font-size: 0.55rem; }
+            .ambient-glow { width: 500px; height: 500px; }
         }
-
         @media (max-width: 480px) {
-            .door-frame { width: 100px; }
-            .door { left: calc(50% - 70px); width: 80px; }
-            .light-beam { left: calc(50% - 20px); width: 40px; }
-            
-            #playBtn {
-                width: 70px;
-                height: 70px;
-            }
-            .play-icon {
-                border-width: 12px 0 12px 20px;
-            }
-            
-            .controls {
-                bottom: 15px;
-                right: 15px;
-                gap: 8px;
-            }
-            .control-btn {
-                padding: 7px 12px;
-                font-size: 0.5rem;
-                gap: 8px;
-            }
+            .door-frame { width: 100px; } .door { left: calc(50% - 70px); width: 80px; } .light-beam { left: calc(50% - 20px); width: 40px; }
+            #playBtn { width: 55px; height: 55px; }
+            .play-icon { border-width: 9px 0 9px 14px; }
+            .controls { bottom: 15px; right: 15px; gap: 8px; }
+            .control-btn { width: 90px; padding: 8px 12px; font-size: 0.5rem; gap: 8px; }
             .sound-wave { height: 10px; }
-            .sound-wave span:nth-child(1) { height: 3px; }
-            .sound-wave span:nth-child(2) { height: 6px; }
-            .sound-wave span:nth-child(3) { height: 10px; }
-            .sound-wave span:nth-child(4) { height: 5px; }
+            .sound-wave span:nth-child(1) { height: 3px; } .sound-wave span:nth-child(2) { height: 6px; }
+            .sound-wave span:nth-child(3) { height: 10px; } .sound-wave span:nth-child(4) { height: 5px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ЭКРАН ЗАПУСКА: ДВЕРЬ СО СВЕТОМ -->
+    <!-- ЭКРАН ЗАПУСКА -->
     <div id="intro">
         <div class="room"></div>
         <div class="door-frame"></div>
         <div class="door"></div>
         <div class="light-beam"></div>
         <div class="light-rays"></div>
-        <div class="dust"></div>
-        <div class="dust"></div>
-        <div class="dust"></div>
-        <div class="dust"></div>
-        <div class="dust"></div>
+        <div class="dust"></div><div class="dust"></div><div class="dust"></div><div class="dust"></div><div class="dust"></div>
         
-        <button id="playBtn" aria-label="Play">
-            <div class="play-icon"></div>
-        </button>
-        <div class="intro-text">Нажмите, чтобы войти</div>
+        <!-- Кнопка Play (без текста под ней) -->
+        <button id="playBtn" aria-label="Play"><div class="play-icon"></div></button>
     </div>
 
-    <!-- Амбиентная подсветка -->
     <div class="ambient-glow glow-1"></div>
     <div class="ambient-glow glow-2"></div>
     <div class="ambient-glow glow-3"></div>
 
-    <!-- Контейнер для слайдов (только 2 активных) -->
     <div id="slides-container"></div>
 
     <!-- Кнопки управления -->
     <div class="controls" id="controls">
         <div class="control-btn" onclick="toggleFullscreen()">
-            <div class="fullscreen-icon"></div>
-            <span>Full</span>
+            <div class="fullscreen-icon"></div><span>Full</span>
         </div>
         <div class="control-btn" onclick="toggleAudio()">
-            <div class="sound-wave" id="wave">
-                <span></span><span></span><span></span><span></span>
-            </div>
-            <span>Live</span>
-            <div class="live-dot"></div>
+            <div class="sound-wave" id="wave"><span></span><span></span><span></span><span></span></div>
+            <span>Live</span><div class="live-dot"></div>
         </div>
     </div>
 
@@ -470,11 +236,24 @@
 
     <script>
         // ==========================================
-        // ⚙️ НАСТРОЙКИ
+        // 📸 КАК ДОБАВИТЬ СВОИ ФОТО (ЧИТАЙ ВНИМАТЕЛЬНО!)
         // ==========================================
-        
+        // 1. Загрузи свои фотографии в ту же папку на GitHub, где лежит index.html.
+        // 2. Назови их по порядку: photo1.jpg, photo2.jpg, photo3.jpg и так далее.
+        // 3. В строке ниже укажи, сколько всего своих фото ты загрузил.
+        //    Например, если ты загрузил 50 фото, напиши: const MY_PHOTOS_COUNT = 50;
+        const MY_PHOTOS_COUNT = 0; 
+
+        // Генератор твоих фото (ничего тут не меняй, он сам создаст список)
+        const myPhotos = [];
+        for (let i = 1; i <= MY_PHOTOS_COUNT; i++) {
+            myPhotos.push(`photo${i}.jpg`);
+        }
+        // ==========================================
+
+
+        // 🚗 МОИ БАЗОВЫЕ ЛАКШЕРИ-ФОТО (машины, вертолеты, девушки, природа)
         const defaultPhotos = [
-            // 🚗 МАШИНЫ
             'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1920&q=80',
             'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1920&q=80',
             'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80',
@@ -485,16 +264,12 @@
             'https://images.unsplash.com/photo-1542362567-b07e54358753?w=1920&q=80',
             'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=1920&q=80',
             'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=1920&q=80',
-            
-            // 🚁 ВЕРТОЛЁТЫ И САМОЛЁТЫ
             'https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=1920&q=80',
             'https://images.unsplash.com/photo-1583395838144-09c0d2d5b0d3?w=1920&q=80',
             'https://images.unsplash.com/photo-1569629743817-70d8db6c323b?w=1920&q=80',
             'https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=1920&q=80',
             'https://images.unsplash.com/photo-1559067515-bf7d799b6d4d?w=1920&q=80',
             'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=1920&q=80',
-            
-            // 👩 КРАСИВЫЕ ДЕВУШКИ
             'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=1920&q=80',
             'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=1920&q=80',
             'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1920&q=80',
@@ -503,8 +278,6 @@
             'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1920&q=80',
             'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=1920&q=80',
             'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1920&q=80',
-            
-            // 🏔️ ГОРЫ И ПРИРОДА
             'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80',
             'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80',
             'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1920&q=80',
@@ -512,29 +285,21 @@
             'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1920&q=80',
             'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=1920&q=80',
             'https://images.unsplash.com/photo-1505144808419-1957a94ca61e?w=1920&q=80',
-            
-            // 🌊 ОКЕАН И СЕРФИНГ
             'https://images.unsplash.com/photo-1502680390548-bdbac40a5e20?w=1920&q=80',
             'https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7?w=1920&q=80',
             'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1920&q=80',
             'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1920&q=80',
             'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1920&q=80',
-            
-            // 🏰 ЗАМКИ И ОСОБНЯКИ
             'https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=1920&q=80',
             'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80',
             'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=80',
             'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&q=80',
             'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1920&q=80',
             'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1920&q=80',
-            
-            // 🎤 КОНЦЕРТЫ И ВЕЧЕРИНКИ
             'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=1920&q=80',
             'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1920&q=80',
             'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1920&q=80',
             'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1920&q=80',
-            
-            // 💎 ЛАКШЕРИ ДЕТАЛИ
             'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1920&q=80',
             'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1920&q=80',
             'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1920&q=80',
@@ -548,18 +313,10 @@
             'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1920&q=80',
         ];
 
-        // 📁 ТВОИ ФОТО — раскомментируй и настрой количество
-        const myPhotos = [];
-        // for (let i = 1; i <= 150; i++) {
-        //     myPhotos.push(`photo${i}.jpg`);
-        // }
-
-        const SLIDE_DURATION = 8000; // 8 секунд на фото (быстрее для динамики)
+        const SLIDE_DURATION = 8000; 
         const RADIO_STREAM = 'https://stream.zeno.fm/p49hqzfxmb4uv';
 
-        // ==========================================
-        // 🎲 ПЕРЕМЕШИВАНИЕ
-        // ==========================================
+        // 🎲 Перемешивание
         function shuffleArray(array) {
             const arr = [...array];
             for (let i = arr.length - 1; i > 0; i--) {
@@ -569,15 +326,12 @@
             return arr;
         }
 
-        // ==========================================
-        // 🖼️ ОПТИМИЗИРОВАННЫЙ СЛАЙДЕР (только 2 слайда в DOM)
-        // ==========================================
+        // 🖼️ Слайдер (только 2 фото в памяти для плавности)
         const allPhotos = shuffleArray([...defaultPhotos, ...myPhotos]);
         const container = document.getElementById('slides-container');
         let currentIndex = 0;
         let isTransitioning = false;
 
-        // Создаём только 2 слайда
         function createSlide(photoUrl, isActive) {
             const slide = document.createElement('div');
             slide.className = 'slide' + (isActive ? ' active' : '');
@@ -586,7 +340,6 @@
             return slide;
         }
 
-        // Предзагрузка следующего фото
         function preloadImage(url) {
             return new Promise((resolve, reject) => {
                 const img = new Image();
@@ -596,160 +349,95 @@
             });
         }
 
-        // Инициализация: показываем первое фото
         async function initSlider() {
-            // Находим первое рабочее фото
             let firstPhoto = null;
             for (const photo of allPhotos) {
-                try {
-                    await preloadImage(photo);
-                    firstPhoto = photo;
-                    break;
-                } catch (e) {
-                    console.warn('Пропуск:', photo);
-                }
+                try { await preloadImage(photo); firstPhoto = photo; break; } 
+                catch (e) { console.warn('Пропуск битого фото:', photo); }
             }
-            
             if (firstPhoto) {
                 createSlide(firstPhoto, true);
                 currentIndex = allPhotos.indexOf(firstPhoto);
             }
         }
 
-        // Переключение на следующее фото
         async function nextSlide() {
             if (isTransitioning) return;
-            
-            // Находим следующее рабочее фото
-            let nextPhoto = null;
-            let nextIndex = currentIndex;
+            let nextPhoto = null; let nextIndex = currentIndex;
             
             for (let i = 1; i <= allPhotos.length; i++) {
                 nextIndex = (currentIndex + i) % allPhotos.length;
-                try {
-                    await preloadImage(allPhotos[nextIndex]);
-                    nextPhoto = allPhotos[nextIndex];
-                    break;
-                } catch (e) {
-                    console.warn('Пропуск:', allPhotos[nextIndex]);
-                }
+                try { await preloadImage(allPhotos[nextIndex]); nextPhoto = allPhotos[nextIndex]; break; } 
+                catch (e) { console.warn('Пропуск:', allPhotos[nextIndex]); }
             }
-            
             if (!nextPhoto) return;
             
             isTransitioning = true;
-            
             const currentSlide = container.querySelector('.slide.active');
             const newSlide = createSlide(nextPhoto, false);
+            void newSlide.offsetWidth; 
             
-            // Форсируем reflow
-            void newSlide.offsetWidth;
-            
-            // Плавное переключение
             newSlide.classList.add('active');
             if (currentSlide) {
                 currentSlide.classList.remove('active');
-                setTimeout(() => {
-                    if (currentSlide.parentNode) {
-                        currentSlide.remove();
-                    }
-                }, 1500); // Ждём окончания transition
+                setTimeout(() => { if (currentSlide.parentNode) currentSlide.remove(); }, 1500);
             }
-            
             currentIndex = nextIndex;
-            
-            setTimeout(() => {
-                isTransitioning = false;
-            }, 1500);
+            setTimeout(() => { isTransitioning = false; }, 1500);
         }
 
-        // ==========================================
-        // 🎵 АУДИО И УПРАВЛЕНИЕ
-        // ==========================================
+        // 🎵 Управление
         const audio = document.getElementById('bgMusic');
         const intro = document.getElementById('intro');
         const playBtn = document.getElementById('playBtn');
         const controls = document.getElementById('controls');
         const wave = document.getElementById('wave');
-        
-        let isPlaying = false;
-        let slideInterval = null;
+        let isPlaying = false; let slideInterval = null;
 
         playBtn.addEventListener('click', startExperience);
 
         async function startExperience() {
             intro.classList.add('hidden');
             controls.classList.add('visible');
-            
-            // Инициализируем слайдер
             await initSlider();
-            
-            // Запускаем радио
             audio.src = RADIO_STREAM;
             audio.play().catch(e => console.log("Ожидание:", e));
             isPlaying = true;
-            
-            // Запускаем слайдер
             slideInterval = setInterval(nextSlide, SLIDE_DURATION);
         }
 
         function toggleAudio() {
-            if (isPlaying) {
-                audio.pause();
-                wave.classList.add('paused');
-                isPlaying = false;
-            } else {
-                audio.play();
-                wave.classList.remove('paused');
-                isPlaying = true;
-            }
+            if (isPlaying) { audio.pause(); wave.classList.add('paused'); isPlaying = false; } 
+            else { audio.play(); wave.classList.remove('paused'); isPlaying = true; }
         }
 
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(e => console.log('Fullscreen error:', e));
-            } else {
-                document.exitFullscreen();
-            }
+            } else { document.exitFullscreen(); }
         }
 
-        // ⌨️ Пробел = пауза/воспроизведение
         document.addEventListener('keydown', (e) => {
             if (e.code === 'Space') {
-                if (!intro.classList.contains('hidden')) {
-                    startExperience();
-                } else {
-                    toggleAudio();
-                }
+                if (!intro.classList.contains('hidden')) startExperience();
+                else toggleAudio();
                 e.preventDefault();
             }
         });
 
-        // 🛡️ Переподключение радио
         audio.addEventListener('error', function() {
-            console.log("Поток прерван, переподключение...");
             wave.classList.add('paused');
             setTimeout(() => {
                 audio.load();
-                if (isPlaying) {
-                    audio.play().catch(e => console.log("Переподключение..."));
-                    wave.classList.remove('paused');
-                }
+                if (isPlaying) { audio.play().catch(e => console.log("Переподключение...")); wave.classList.remove('paused'); }
             }, 5000);
         });
 
-        // 📱 Свайпы на мобильных
         let touchStartY = 0;
-        document.addEventListener('touchstart', (e) => {
-            touchStartY = e.touches[0].clientY;
-        }, {passive: true});
-
+        document.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, {passive: true});
         document.addEventListener('touchend', (e) => {
-            const touchEndY = e.changedTouches[0].clientY;
-            const diff = touchStartY - touchEndY;
-            if (Math.abs(diff) > 50 && !isTransitioning) {
-                nextSlide();
-            }
+            const diff = touchStartY - e.changedTouches[0].clientY;
+            if (Math.abs(diff) > 50 && !isTransitioning) nextSlide();
         }, {passive: true});
     </script>
 </body>
