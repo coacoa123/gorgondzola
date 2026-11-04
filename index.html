@@ -13,127 +13,234 @@
             width: 100vw;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             touch-action: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* --- ЭКРАН ЗАПУСКА --- */
+        /* ==========================================
+           ЭКРАН ЗАПУСКА: ПРИОТКРЫТАЯ ДВЕРЬ СО СВЕТОМ
+           ========================================== */
         #intro {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: #000;
+            background: #0a0a0a;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 100;
-            transition: opacity 2s ease, visibility 2s ease;
+            transition: opacity 1.5s ease, visibility 1.5s ease;
+            overflow: hidden;
         }
         #intro.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-        /* МАССИВНАЯ КНОПКА ПИТАНИЯ */
-        #powerBtn {
+        /* Стены комнаты */
+        .room {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at center, #1a1510 0%, #0a0805 60%, #000 100%);
+        }
+
+        /* Дверной проём (тёмная вертикальная щель) */
+        .door-frame {
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 90%;
+            background: #000;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.9);
+        }
+
+        /* Приоткрытая дверь (чуть видна слева) */
+        .door {
+            position: absolute;
+            top: 5%;
+            left: calc(50% - 110px);
             width: 140px;
-            height: 140px;
+            height: 90%;
+            background: linear-gradient(90deg, #1a1510 0%, #0d0a07 100%);
+            transform: perspective(800px) rotateY(25deg);
+            transform-origin: left center;
+            box-shadow: 
+                inset -10px 0 30px rgba(0,0,0,0.8),
+                5px 0 20px rgba(0,0,0,0.5);
+        }
+
+        /* Яркий свет из-за двери */
+        .light-beam {
+            position: absolute;
+            top: 5%;
+            left: calc(50% - 40px);
+            width: 80px;
+            height: 90%;
+            background: linear-gradient(
+                180deg,
+                rgba(255, 240, 200, 0.95) 0%,
+                rgba(255, 220, 150, 0.8) 50%,
+                rgba(255, 200, 100, 0.6) 100%
+            );
+            filter: blur(8px);
+            box-shadow: 
+                0 0 60px rgba(255, 220, 150, 0.6),
+                0 0 120px rgba(255, 200, 100, 0.4);
+            animation: lightPulse 4s infinite ease-in-out;
+        }
+
+        /* Расходящиеся лучи света на полу */
+        .light-rays {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 40%;
+            background: 
+                radial-gradient(ellipse at 50% 0%, rgba(255, 220, 150, 0.3) 0%, transparent 70%);
+            filter: blur(20px);
+            animation: lightPulse 4s infinite ease-in-out 0.5s;
+        }
+
+        /* Пылинки в луче света */
+        .dust {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 240, 200, 0.8);
             border-radius: 50%;
-            border: 3px solid rgba(255,255,255,0.3);
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.4) 100%);
-            backdrop-filter: blur(15px);
+            filter: blur(1px);
+            animation: floatDust 8s infinite ease-in-out;
+        }
+        .dust:nth-child(1) { top: 30%; left: 48%; animation-delay: 0s; }
+        .dust:nth-child(2) { top: 50%; left: 52%; animation-delay: 2s; }
+        .dust:nth-child(3) { top: 40%; left: 50%; animation-delay: 4s; }
+        .dust:nth-child(4) { top: 60%; left: 49%; animation-delay: 1s; }
+        .dust:nth-child(5) { top: 35%; left: 51%; animation-delay: 3s; }
+
+        @keyframes lightPulse {
+            0%, 100% { opacity: 0.85; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes floatDust {
+            0%, 100% { transform: translate(0, 0); opacity: 0.3; }
+            50% { transform: translate(10px, -20px); opacity: 0.9; }
+        }
+
+        /* КНОПКА PLAY */
+        #playBtn {
+            position: relative;
+            z-index: 10;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            box-shadow: 0 0 60px rgba(255,255,255,0.1), inset 0 0 60px rgba(255,255,255,0.05);
+            transition: all 0.4s ease;
+            box-shadow: 0 0 40px rgba(255, 220, 150, 0.2);
+            margin-bottom: 30px;
         }
-        
-        #powerBtn::before {
-            content: '';
+        #playBtn:hover {
+            transform: scale(1.1);
+            border-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 60px rgba(255, 220, 150, 0.5);
+            background: rgba(255, 220, 150, 0.1);
+        }
+        #playBtn:active {
+            transform: scale(1.05);
+        }
+
+        /* Треугольник Play */
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 16px 0 16px 28px;
+            border-color: transparent transparent transparent #fff;
+            margin-left: 6px;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+        }
+
+        .intro-text {
+            position: relative;
+            z-index: 10;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-top: 20px;
+        }
+
+        /* ==========================================
+           СЛАЙДЫ (оптимизировано для плавности)
+           ========================================== */
+        #slides-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 2;
+        }
+
+        .slide {
             position: absolute;
-            inset: -5px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(212,175,55,0.3), rgba(255,255,255,0.1));
-            z-index: -1;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            will-change: opacity;
+            transition: opacity 1.5s ease-in-out;
         }
+        .slide.active { opacity: 1; }
+        .slide.prev { opacity: 0; }
         
-        #powerBtn:hover::before {
-            opacity: 1;
-        }
-        
-        #powerBtn:hover {
-            transform: scale(1.15);
-            border-color: rgba(255,255,255,0.8);
-            box-shadow: 0 0 100px rgba(212,175,55,0.4), inset 0 0 80px rgba(255,255,255,0.1);
-        }
-        
-        #powerBtn:active {
-            transform: scale(1.08);
-        }
-
-        /* Символ питания */
-        .power-icon {
-            width: 60px;
-            height: 60px;
-            position: relative;
-        }
-        
-        .power-icon::before {
+        .slide::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 8px;
-            height: 28px;
-            background: linear-gradient(to bottom, #fff, rgba(255,255,255,0.6));
-            border-radius: 4px;
-            box-shadow: 0 0 20px rgba(255,255,255,0.5);
-        }
-        
-        .power-icon::after {
-            content: '';
-            position: absolute;
-            bottom: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 52px;
-            height: 52px;
-            border: 6px solid #fff;
-            border-top-color: transparent;
-            border-radius: 50%;
-            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.6) 100%);
+            pointer-events: none;
         }
 
-        /* Пульсация кнопки */
-        @keyframes powerPulse {
-            0%, 100% { box-shadow: 0 0 60px rgba(255,255,255,0.1), inset 0 0 60px rgba(255,255,255,0.05); }
-            50% { box-shadow: 0 0 100px rgba(212,175,55,0.3), inset 0 0 80px rgba(255,255,255,0.1); }
-        }
-        
-        #powerBtn {
-            animation: powerPulse 3s infinite ease-in-out;
+        /* На десктопе — лёгкий зум */
+        @media (min-width: 769px) {
+            .slide {
+                animation: slowZoom 40s infinite alternate ease-in-out;
+            }
+            @keyframes slowZoom {
+                0% { transform: scale(1); }
+                100% { transform: scale(1.08); }
+            }
         }
 
-        /* --- АМБИЕНТНАЯ ПОДСВЕТКА --- */
+        /* ==========================================
+           АМБИЕНТНАЯ ПОДСВЕТКА
+           ========================================== */
         .ambient-glow {
             position: fixed;
-            width: 1000px;
-            height: 1000px;
+            width: 800px;
+            height: 800px;
             border-radius: 50%;
-            filter: blur(200px);
-            opacity: 0.25;
+            filter: blur(180px);
+            opacity: 0.2;
             z-index: 1;
             animation: float 30s infinite ease-in-out;
             pointer-events: none;
         }
         .glow-1 {
-            top: -400px; left: -400px;
+            top: -300px; left: -300px;
             background: radial-gradient(circle, #D4AF37 0%, transparent 70%);
             animation-delay: 0s;
         }
         .glow-2 {
-            bottom: -400px; right: -400px;
+            bottom: -300px; right: -300px;
             background: radial-gradient(circle, #8B5A3C 0%, transparent 70%);
             animation-delay: 10s;
         }
@@ -145,43 +252,29 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.25; }
-            33% { transform: translate(80px, 50px) scale(1.2); opacity: 0.35; }
-            66% { transform: translate(-50px, 70px) scale(0.85); opacity: 0.15; }
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.2; }
+            33% { transform: translate(60px, 40px) scale(1.15); opacity: 0.3; }
+            66% { transform: translate(-40px, 60px) scale(0.9); opacity: 0.15; }
         }
 
-        /* --- СЛАЙДЫ --- */
-        .slide {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-size: cover;
-            background-position: center;
-            opacity: 0;
-            transition: opacity 5s ease-in-out;
-            z-index: 2;
-            animation: slowZoom 35s infinite alternate ease-in-out;
-        }
-        .slide.active { opacity: 1; }
-        
-        .slide::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.75) 100%);
-        }
-
-        @keyframes slowZoom {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.08); }
-        }
-
-        /* --- КНОПКА ЗВУКА --- */
-        #audioControl {
+        /* ==========================================
+           КНОПКИ УПРАВЛЕНИЯ (справа внизу)
+           ========================================== */
+        .controls {
             position: fixed;
             bottom: 30px;
             right: 30px;
             z-index: 20;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: flex-end;
+            opacity: 0;
+            transition: opacity 1s ease 1s;
+        }
+        .controls.visible { opacity: 1; }
+
+        .control-btn {
             color: #fff;
             font-size: 0.6rem;
             letter-spacing: 2px;
@@ -190,20 +283,45 @@
             align-items: center;
             gap: 10px;
             cursor: pointer;
-            opacity: 0;
-            transition: opacity 1.5s ease 2s, all 0.3s ease;
-            padding: 12px 22px;
+            padding: 10px 18px;
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 30px;
             background: rgba(0,0,0,0.5);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            user-select: none;
         }
-        #audioControl.visible { opacity: 1; }
-        #audioControl:hover {
+        .control-btn:hover {
             border-color: rgba(255,255,255,0.5);
             background: rgba(0,0,0,0.7);
         }
-        
+
+        /* Иконка fullscreen */
+        .fullscreen-icon {
+            width: 14px;
+            height: 14px;
+            position: relative;
+        }
+        .fullscreen-icon::before,
+        .fullscreen-icon::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border: 1.5px solid #fff;
+        }
+        .fullscreen-icon::before {
+            top: 0; left: 0;
+            border-right: none;
+            border-bottom: none;
+        }
+        .fullscreen-icon::after {
+            bottom: 0; right: 0;
+            border-left: none;
+            border-top: none;
+        }
+
         .sound-wave {
             display: flex;
             gap: 3px;
@@ -241,76 +359,62 @@
             50% { opacity: 0.4; transform: scale(1.3); }
         }
 
-        /* --- МОБИЛЬНАЯ АДАПТАЦИЯ --- */
+        /* ==========================================
+           МОБИЛЬНАЯ АДАПТАЦИЯ
+           ========================================== */
         @media (max-width: 768px) {
-            #powerBtn {
-                width: 120px;
-                height: 120px;
+            .door-frame { width: 140px; }
+            .door { left: calc(50% - 90px); width: 110px; }
+            .light-beam { left: calc(50% - 30px); width: 60px; }
+            
+            #playBtn {
+                width: 80px;
+                height: 80px;
+            }
+            .play-icon {
+                border-width: 14px 0 14px 24px;
+                margin-left: 5px;
             }
             
-            .power-icon {
-                width: 50px;
-                height: 50px;
-            }
-            
-            .power-icon::before {
-                width: 6px;
-                height: 24px;
-            }
-            
-            .power-icon::after {
-                width: 42px;
-                height: 42px;
-                border-width: 5px;
-                bottom: 6px;
-            }
-            
-            #audioControl {
+            .controls {
                 bottom: 20px;
                 right: 20px;
-                padding: 10px 18px;
+            }
+            .control-btn {
+                padding: 8px 14px;
                 font-size: 0.55rem;
             }
             
             .ambient-glow {
-                width: 600px;
-                height: 600px;
+                width: 500px;
+                height: 500px;
             }
         }
 
         @media (max-width: 480px) {
-            #powerBtn {
-                width: 100px;
-                height: 100px;
+            .door-frame { width: 100px; }
+            .door { left: calc(50% - 70px); width: 80px; }
+            .light-beam { left: calc(50% - 20px); width: 40px; }
+            
+            #playBtn {
+                width: 70px;
+                height: 70px;
+            }
+            .play-icon {
+                border-width: 12px 0 12px 20px;
             }
             
-            .power-icon {
-                width: 42px;
-                height: 42px;
+            .controls {
+                bottom: 15px;
+                right: 15px;
+                gap: 8px;
             }
-            
-            .power-icon::before {
-                width: 5px;
-                height: 20px;
-            }
-            
-            .power-icon::after {
-                width: 36px;
-                height: 36px;
-                border-width: 4px;
-                bottom: 5px;
-            }
-            
-            #audioControl {
-                padding: 8px 14px;
+            .control-btn {
+                padding: 7px 12px;
                 font-size: 0.5rem;
                 gap: 8px;
             }
-            
-            .sound-wave {
-                height: 10px;
-            }
-            
+            .sound-wave { height: 10px; }
             .sound-wave span:nth-child(1) { height: 3px; }
             .sound-wave span:nth-child(2) { height: 6px; }
             .sound-wave span:nth-child(3) { height: 10px; }
@@ -320,28 +424,46 @@
 </head>
 <body>
 
+    <!-- ЭКРАН ЗАПУСКА: ДВЕРЬ СО СВЕТОМ -->
+    <div id="intro">
+        <div class="room"></div>
+        <div class="door-frame"></div>
+        <div class="door"></div>
+        <div class="light-beam"></div>
+        <div class="light-rays"></div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+        <div class="dust"></div>
+        
+        <button id="playBtn" aria-label="Play">
+            <div class="play-icon"></div>
+        </button>
+        <div class="intro-text">Нажмите, чтобы войти</div>
+    </div>
+
     <!-- Амбиентная подсветка -->
     <div class="ambient-glow glow-1"></div>
     <div class="ambient-glow glow-2"></div>
     <div class="ambient-glow glow-3"></div>
 
-    <!-- Экран запуска с кнопкой питания -->
-    <div id="intro">
-        <button id="powerBtn" aria-label="Power On">
-            <div class="power-icon"></div>
-        </button>
-    </div>
-
-    <!-- Контейнер для слайдов -->
+    <!-- Контейнер для слайдов (только 2 активных) -->
     <div id="slides-container"></div>
 
-    <!-- Кнопка звука -->
-    <div id="audioControl" onclick="toggleAudio()">
-        <div class="sound-wave" id="wave">
-            <span></span><span></span><span></span><span></span>
+    <!-- Кнопки управления -->
+    <div class="controls" id="controls">
+        <div class="control-btn" onclick="toggleFullscreen()">
+            <div class="fullscreen-icon"></div>
+            <span>Full</span>
         </div>
-        <span>LIVE</span>
-        <div class="live-dot"></div>
+        <div class="control-btn" onclick="toggleAudio()">
+            <div class="sound-wave" id="wave">
+                <span></span><span></span><span></span><span></span>
+            </div>
+            <span>Live</span>
+            <div class="live-dot"></div>
+        </div>
     </div>
 
     <audio id="bgMusic" preload="none"></audio>
@@ -351,73 +473,93 @@
         // ⚙️ НАСТРОЙКИ
         // ==========================================
         
-        // 🖼️ БАЗОВЫЕ ЛАКШЕРИ-ФОТО (50 штук)
         const defaultPhotos = [
-            'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1920&q=80', // Cadillac
-            'https://images.unsplash.com/photo-1502680390548-bdbac40a5e20?w=1920&q=80', // Surfing
-            'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80', // Mountains
-            'https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=1920&q=80', // Mountains
-            'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=1920&q=80', // Concert
-            'https://images.unsplash.com/photo-1533106497176-45ae19e68ba2?w=1920&q=80', // Yacht
-            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80', // Mountains
-            'https://images.unsplash.com/photo-1504215680853-026ed2a45def?w=1920&q=80', // Office luxury
-            'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80', // Luxury interior
-            'https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=1920&q=80', // Helicopter
-            'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1920&q=80', // Cocktail luxury
-            'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1920&q=80', // Mountain hiker
-            'https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7?w=1920&q=80', // Ocean waves
-            'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1920&q=80', // Ocean
-            'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1920&q=80', // Car road
-            'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1920&q=80', // Landscape
-            'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1920&q=80', // Lake mountains
-            'https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=1920&q=80', // Castle
-            'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1920&q=80', // Nature
-            'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80', // Forest
-            'https://images.unsplash.com/photo-1505144808419-1957a94ca61e?w=1920&q=80', // Waterfall
-            'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=1920&q=80', // Waterfall
-            'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=1920&q=80', // Nature
-            'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1920&q=80', // Night sky
-            'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=1920&q=80', // Car luxury
-            'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&q=80', // Hotel luxury
-            'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1920&q=80', // Watch luxury
-            'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1920&q=80', // Hotel lobby
-            'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1920&q=80', // Resort
-            'https://images.unsplash.com/photo-1571896349842-33c894242d2b?w=1920&q=80', // Hotel pool
-            'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1920&q=80', // Hotel room
-            'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80', // Mansion
-            'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=80', // Modern house
-            'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1920&q=80', // Bathroom luxury
-            'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80', // House exterior
-            'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=1920&q=80', // Kitchen luxury
-            'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1920&q=80', // Living room
-            'https://images.unsplash.com/photo-1600573472591-ee6c563aaecb?w=1920&q=80', // Mansion exterior
-            'https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=1920&q=80', // Bedroom luxury
-            'https://images.unsplash.com/photo-1600585152220-90363fe7e115?w=1920&q=80', // House luxury
-            'https://images.unsplash.com/photo-1600566752229-250ed79470f8?w=1920&q=80', // Bathroom modern
-            'https://images.unsplash.com/photo-1600121848594-d8644e57abab?w=1920&q=80', // Pool luxury
-            'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&q=80', // House modern
-            'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1920&q=80', // Interior modern
-            'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1920&q=80', // House night
-            'https://images.unsplash.com/photo-1600566752355-83974869b2d2?w=1920&q=80', // Bedroom modern
-            'https://images.unsplash.com/photo-1600566752229-250ed79470f7?w=1920&q=80', // Staircase luxury
-            'https://images.unsplash.com/photo-1600047509358-9dc75507daeb?w=1920&q=80', // Kitchen modern
-            'https://images.unsplash.com/photo-1600121848594-d8644e57ab3c?w=1920&q=80', // Pool night
-            'https://images.unsplash.com/photo-1600047508369-487e46f4e87c?w=1920&q=80', // Dining room
+            // 🚗 МАШИНЫ
+            'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1920&q=80',
+            'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1920&q=80',
+            'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80',
+            'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=1920&q=80',
+            'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=1920&q=80',
+            'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=1920&q=80',
+            'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=1920&q=80',
+            'https://images.unsplash.com/photo-1542362567-b07e54358753?w=1920&q=80',
+            'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=1920&q=80',
+            'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=1920&q=80',
+            
+            // 🚁 ВЕРТОЛЁТЫ И САМОЛЁТЫ
+            'https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=1920&q=80',
+            'https://images.unsplash.com/photo-1583395838144-09c0d2d5b0d3?w=1920&q=80',
+            'https://images.unsplash.com/photo-1569629743817-70d8db6c323b?w=1920&q=80',
+            'https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=1920&q=80',
+            'https://images.unsplash.com/photo-1559067515-bf7d799b6d4d?w=1920&q=80',
+            'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=1920&q=80',
+            
+            // 👩 КРАСИВЫЕ ДЕВУШКИ
+            'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=1920&q=80',
+            'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=1920&q=80',
+            'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1920&q=80',
+            'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=1920&q=80',
+            'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=1920&q=80',
+            'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1920&q=80',
+            'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=1920&q=80',
+            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1920&q=80',
+            
+            // 🏔️ ГОРЫ И ПРИРОДА
+            'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80',
+            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80',
+            'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1920&q=80',
+            'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1920&q=80',
+            'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1920&q=80',
+            'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=1920&q=80',
+            'https://images.unsplash.com/photo-1505144808419-1957a94ca61e?w=1920&q=80',
+            
+            // 🌊 ОКЕАН И СЕРФИНГ
+            'https://images.unsplash.com/photo-1502680390548-bdbac40a5e20?w=1920&q=80',
+            'https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7?w=1920&q=80',
+            'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1920&q=80',
+            'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1920&q=80',
+            'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1920&q=80',
+            
+            // 🏰 ЗАМКИ И ОСОБНЯКИ
+            'https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=1920&q=80',
+            'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80',
+            'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=80',
+            'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&q=80',
+            'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1920&q=80',
+            'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1920&q=80',
+            
+            // 🎤 КОНЦЕРТЫ И ВЕЧЕРИНКИ
+            'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=1920&q=80',
+            'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1920&q=80',
+            'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1920&q=80',
+            'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1920&q=80',
+            
+            // 💎 ЛАКШЕРИ ДЕТАЛИ
+            'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1920&q=80',
+            'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1920&q=80',
+            'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1920&q=80',
+            'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80',
+            'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1920&q=80',
+            'https://images.unsplash.com/photo-1600573472591-ee6c563aaecb?w=1920&q=80',
+            'https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=1920&q=80',
+            'https://images.unsplash.com/photo-1600585152220-90363fe7e115?w=1920&q=80',
+            'https://images.unsplash.com/photo-1600121848594-d8644e57abab?w=1920&q=80',
+            'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&q=80',
+            'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1920&q=80',
         ];
 
-        // 📁 ТВОИ ФОТО — просто добавляй сюда photo1, photo2 и т.д.
+        // 📁 ТВОИ ФОТО — раскомментируй и настрой количество
         const myPhotos = [];
-        // Пример: 
         // for (let i = 1; i <= 150; i++) {
         //     myPhotos.push(`photo${i}.jpg`);
         // }
 
-        const SLIDE_DURATION = 10000; // 10 секунд
+        const SLIDE_DURATION = 8000; // 8 секунд на фото (быстрее для динамики)
         const RADIO_STREAM = 'https://stream.zeno.fm/p49hqzfxmb4uv';
 
         // ==========================================
-
-        // 🎲 Перемешивание массива
+        // 🎲 ПЕРЕМЕШИВАНИЕ
+        // ==========================================
         function shuffleArray(array) {
             const arr = [...array];
             for (let i = arr.length - 1; i > 0; i--) {
@@ -427,73 +569,128 @@
             return arr;
         }
 
-        // 🖼️ Создаём слайды
+        // ==========================================
+        // 🖼️ ОПТИМИЗИРОВАННЫЙ СЛАЙДЕР (только 2 слайда в DOM)
+        // ==========================================
+        const allPhotos = shuffleArray([...defaultPhotos, ...myPhotos]);
         const container = document.getElementById('slides-container');
-        const allPhotos = [...defaultPhotos, ...myPhotos];
-        const shuffledPhotos = shuffleArray(allPhotos);
-        let slides = [];
-        let loadedSlidesCount = 0;
+        let currentIndex = 0;
+        let isTransitioning = false;
 
-        shuffledPhotos.forEach((photo, index) => {
+        // Создаём только 2 слайда
+        function createSlide(photoUrl, isActive) {
             const slide = document.createElement('div');
-            slide.className = 'slide' + (index === 0 ? ' active' : '');
-            slide.style.backgroundImage = `url('${photo}')`;
-            slide.dataset.src = photo;
-            slide.style.display = 'none'; // Скрываем пока не загрузится
+            slide.className = 'slide' + (isActive ? ' active' : '');
+            slide.style.backgroundImage = `url('${photoUrl}')`;
             container.appendChild(slide);
-            slides.push(slide);
-        });
+            return slide;
+        }
 
-        // 🛡️ Проверка загрузки фото
-        slides.forEach((slide, idx) => {
-            const img = new Image();
-            img.onload = () => {
-                slide.style.display = 'block';
-                loadedSlidesCount++;
-                console.log(`✅ Загружено (${loadedSlidesCount}/${slides.length}): ${slide.dataset.src}`);
-                // Если это первый загруженный слайд — делаем его активным
-                if (loadedSlidesCount === 1 && !document.querySelector('.slide.active')) {
-                    slide.classList.add('active');
+        // Предзагрузка следующего фото
+        function preloadImage(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(url);
+                img.onerror = () => reject(url);
+                img.src = url;
+            });
+        }
+
+        // Инициализация: показываем первое фото
+        async function initSlider() {
+            // Находим первое рабочее фото
+            let firstPhoto = null;
+            for (const photo of allPhotos) {
+                try {
+                    await preloadImage(photo);
+                    firstPhoto = photo;
+                    break;
+                } catch (e) {
+                    console.warn('Пропуск:', photo);
                 }
-            };
-            img.onerror = () => {
-                console.warn(`❌ Не загружено: ${slide.dataset.src}`);
-                slide.remove();
-                slides = slides.filter(s => s !== slide);
-            };
-            img.src = slide.dataset.src;
-        });
+            }
+            
+            if (firstPhoto) {
+                createSlide(firstPhoto, true);
+                currentIndex = allPhotos.indexOf(firstPhoto);
+            }
+        }
 
-        // 🎵 Аудио и управление
+        // Переключение на следующее фото
+        async function nextSlide() {
+            if (isTransitioning) return;
+            
+            // Находим следующее рабочее фото
+            let nextPhoto = null;
+            let nextIndex = currentIndex;
+            
+            for (let i = 1; i <= allPhotos.length; i++) {
+                nextIndex = (currentIndex + i) % allPhotos.length;
+                try {
+                    await preloadImage(allPhotos[nextIndex]);
+                    nextPhoto = allPhotos[nextIndex];
+                    break;
+                } catch (e) {
+                    console.warn('Пропуск:', allPhotos[nextIndex]);
+                }
+            }
+            
+            if (!nextPhoto) return;
+            
+            isTransitioning = true;
+            
+            const currentSlide = container.querySelector('.slide.active');
+            const newSlide = createSlide(nextPhoto, false);
+            
+            // Форсируем reflow
+            void newSlide.offsetWidth;
+            
+            // Плавное переключение
+            newSlide.classList.add('active');
+            if (currentSlide) {
+                currentSlide.classList.remove('active');
+                setTimeout(() => {
+                    if (currentSlide.parentNode) {
+                        currentSlide.remove();
+                    }
+                }, 1500); // Ждём окончания transition
+            }
+            
+            currentIndex = nextIndex;
+            
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 1500);
+        }
+
+        // ==========================================
+        // 🎵 АУДИО И УПРАВЛЕНИЕ
+        // ==========================================
         const audio = document.getElementById('bgMusic');
         const intro = document.getElementById('intro');
-        const powerBtn = document.getElementById('powerBtn');
-        const audioControl = document.getElementById('audioControl');
+        const playBtn = document.getElementById('playBtn');
+        const controls = document.getElementById('controls');
         const wave = document.getElementById('wave');
         
-        let currentSlide = 0;
         let isPlaying = false;
         let slideInterval = null;
 
-        // Запуск по кнопке питания
-        powerBtn.addEventListener('click', () => {
-            intro.classList.add('hidden');
-            audioControl.classList.add('visible');
-            startExperience();
-        });
+        playBtn.addEventListener('click', startExperience);
 
-        function startExperience() {
+        async function startExperience() {
+            intro.classList.add('hidden');
+            controls.classList.add('visible');
+            
+            // Инициализируем слайдер
+            await initSlider();
+            
+            // Запускаем радио
             audio.src = RADIO_STREAM;
             audio.play().catch(e => console.log("Ожидание:", e));
             isPlaying = true;
+            
+            // Запускаем слайдер
             slideInterval = setInterval(nextSlide, SLIDE_DURATION);
-        }
-
-        function nextSlide() {
-            if (slides.length === 0) return;
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
         }
 
         function toggleAudio() {
@@ -508,11 +705,19 @@
             }
         }
 
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(e => console.log('Fullscreen error:', e));
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
         // ⌨️ Пробел = пауза/воспроизведение
         document.addEventListener('keydown', (e) => {
             if (e.code === 'Space') {
                 if (!intro.classList.contains('hidden')) {
-                    powerBtn.click();
+                    startExperience();
                 } else {
                     toggleAudio();
                 }
@@ -533,7 +738,7 @@
             }, 5000);
         });
 
-        //  Touch события для мобильных
+        // 📱 Свайпы на мобильных
         let touchStartY = 0;
         document.addEventListener('touchstart', (e) => {
             touchStartY = e.touches[0].clientY;
@@ -542,15 +747,8 @@
         document.addEventListener('touchend', (e) => {
             const touchEndY = e.changedTouches[0].clientY;
             const diff = touchStartY - touchEndY;
-            // Свайп вверх/вниз для переключения слайдов на мобильных
-            if (Math.abs(diff) > 50 && slides.length > 0) {
-                if (diff > 0) {
-                    nextSlide();
-                } else {
-                    slides[currentSlide].classList.remove('active');
-                    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-                    slides[currentSlide].classList.add('active');
-                }
+            if (Math.abs(diff) > 50 && !isTransitioning) {
+                nextSlide();
             }
         }, {passive: true});
     </script>
